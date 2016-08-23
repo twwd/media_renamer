@@ -5,16 +5,34 @@ import time
 
 import exifread
 
+ext_list = [".jpg", ".jpeg", ".mov", ".mts", ".mp4"]
 
-def get_older_date_from_file(filename):
-    date = os.path.getmtime(filename) if os.path.getmtime(filename) < os.path.getctime(
-        filename) else os.path.getctime(
-        filename)
+
+def read_dir(path):
+    files = []
+    if path != "":
+        lst = os.listdir(path)
+        lst.sort()
+        for file in lst:
+            if os.path.splitext(file)[1].lower() in ext_list:
+                files.append(
+                    (os.path.splitext(file), rename(os.path.join(path, file))))
+    return files
+
+
+def get_older_date_from_file(file_path):
+    date = os.path.getmtime(file_path) if os.path.getmtime(file_path) < os.path.getctime(
+        file_path) else os.path.getctime(
+        file_path)
+
+    # check Android file names
+    file_name = os.path.splitext(os.path.basename(file_path))[0]
     try:
-        date_from_filename = time.mktime(time.strptime(str(date), "%Y%m%d_%H%M%S"))
+        date_from_filename = time.mktime(time.strptime(str(file_name), "%Y%m%d_%H%M%S"))
     except ValueError:
-        print("error")
-        date_from_filename = None
+        print(file_name)
+        return date
+
     date = date_from_filename if date_from_filename is not None and date > date_from_filename else date
     return date
 

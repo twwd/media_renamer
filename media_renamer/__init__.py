@@ -29,24 +29,16 @@ class MediaRenamerApp(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
             self.frames[F] = frame
 
-        # the menu
-        # menubar = tk.Menu(container)
-        # filemenu = tk.Menu(menubar, tearoff=0)
-        # filemenu.add_command(label="Settings", command=self.show_frame(SettingsView))
-        # filemenu.add_separator()
-        # filemenu.add_command(label="Exit", command=quit)
-        # menubar.add_cascade(label="File", menu=filemenu)
-
-        # tk.Tk.config(self, menu=menubar)
-
         self.show_main()
 
     def show_main(self):
-        frame = self.frames[MainFrame]
-        frame.tkraise()
+        self.show_frame(MainFrame)
 
     def show_settings(self):
-        frame = self.frames[SettingsFrame]
+        self.show_frame(SettingsFrame)
+
+    def show_frame(self, f):
+        frame = self.frames[f]
         frame.tkraise()
 
 

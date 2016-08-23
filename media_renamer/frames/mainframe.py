@@ -5,8 +5,6 @@ from tkinter import filedialog
 
 from media_renamer import renamer
 
-ext_list = [".jpg", ".jpeg", ".mov", ".mts", ".mp4"]
-
 
 class MainFrame(ttk.Frame):
     def __init__(self, parent, controller, **kwargs):
@@ -20,18 +18,24 @@ class MainFrame(ttk.Frame):
         directory_btn = ttk.Button(self, text="Durchsuchen", command=self.open_folderpicker)
 
         # TODO Table
-        table = ttk.Treeview(self, columns="new_filename")
+        table_frame = ttk.Frame(self)
+        table = ttk.Treeview(table_frame, columns="new_filename")
         table.heading("#0", text="Ursprünglicher Dateiname", anchor="w")
         table.column("#0", anchor="w")
         table.heading("new_filename", text="Neuer Dateiname", anchor="w")
         table.column("new_filename", anchor="w")
         table.tag_configure('even', background='#EFEFEF')
         table.tag_configure('odd', background='#FFFFFF')
+        table.tag_configure('nochanges', foreground="#888888")
+
+        table_scroll = ttk.Scrollbar(table_frame, orient=tk.VERTICAL, command=table.yview)
+        table['yscrollcommand'] = table_scroll.set
+
         self.table = table
 
         # Footer buttons
-        settings_btn = ttk.Button(self, text="Einstellungen",
-                                  command=controller.show_settings, padding="5")
+        # settings_btn = ttk.Button(self, text="Einstellungen",
+        #                          command=controller.show_settings, padding="5")
 
         preview_btn = ttk.Button(self, text="Vorschau", command=self.read_files, padding="5")
         start_btn = ttk.Button(self, text="Umbennen", command=lambda: print("Umbennen"), padding="5")
@@ -44,9 +48,13 @@ class MainFrame(ttk.Frame):
         directory_entry.grid(row=0, column=1, columnspan=2, sticky="nwe", padx=5, pady=(2, 2))
         directory_btn.grid(row=0, column=3, sticky="ne", padx=(5, 0))
 
-        table.grid(row=1, column=0, columnspan=4, sticky="nswe", pady=10)
+        table_frame.grid(row=1, column=0, columnspan=4, sticky="nswe", pady=10)
+        table_frame.grid_columnconfigure(0, weight=1)
+        table_frame.grid_rowconfigure(0, weight=1)
+        table.grid(row=0, column=0, sticky="nswe")
+        table_scroll.grid(row=0, column=1, sticky="nse")
 
-        settings_btn.grid(row=2, column=0, sticky="sw")
+        # settings_btn.grid(row=2, column=0, sticky="sw")
         preview_btn.grid(row=2, column=2, sticky="se")
         start_btn.grid(row=2, column=3, sticky="se", padx=(5, 0))
 
@@ -61,17 +69,9 @@ class MainFrame(ttk.Frame):
             self.read_files()
 
     def read_files(self):
-
         for widget in self.table.get_children():
             self.table.delete(widget)
-
-        files = []
-        if self.directory_path.get() != "":
-            for file in os.listdir(self.directory_path.get()):
-                if os.path.splitext(file)[1].lower() in ext_list:
-                    files.append(
-                        (os.path.splitext(file), renamer.rename(os.path.join(self.directory_path.get(), file))))
-        self.load_table(files)
+        self.load_table(renamer.read_dir(self.directory_path.get()))
 
     def load_table(self, file_list):
         odd = False
