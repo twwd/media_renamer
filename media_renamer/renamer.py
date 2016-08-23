@@ -25,7 +25,7 @@ class Directory:
         for file in lst:
             if os.path.splitext(file)[1].lower() in ext_list:
                 self.file_names.append(
-                    [os.path.basename(file), None])
+                    [os.path.basename(file), ""])
 
     def generate_new_file_names(self):
         self.update()
@@ -64,7 +64,6 @@ def get_older_date_from_file(file_path):
     try:
         date_from_filename = time.mktime(time.strptime(str(file_name), "%Y%m%d_%H%M%S"))
     except ValueError:
-        print(file_name)
         return date
 
     date = date_from_filename if date_from_filename is not None and date > date_from_filename else date
@@ -86,7 +85,15 @@ def generate_new_file_name(file_path):
     if date is None:
         date = get_older_date_from_file(file_path)
     else:
-        date = time.mktime(time.strptime(str(date), "%Y:%m:%d %H:%M:%S"))
+        fmt = "%Y:%m:%d %H:%M:%S"
+        try:
+            date = time.mktime(time.strptime(str(date), fmt))
+        except ValueError as v:
+            ulr = len(v.args[0].partition('unconverted data remains: ')[2])
+            if ulr:
+                date = time.mktime(time.strptime(str(date)[:-ulr], fmt))
+            else:
+                raise v
 
     file_formatted_datetime = (datetime.datetime.fromtimestamp(date)).strftime("%Y-%m-%d_%H.%M.%S")
 
