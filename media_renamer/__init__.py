@@ -4,7 +4,6 @@ from tkinter import ttk
 
 from media_renamer.frames.mainframe import MainFrame
 from media_renamer.frames.settingsframe import SettingsFrame
-import media_renamer.renamer
 
 
 class MediaRenamerApp(tk.Tk):
