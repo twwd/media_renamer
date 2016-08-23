@@ -1,9 +1,9 @@
 import os
-from tkinter import ttk
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import ttk
 
-from media_renamer import renamer
+from media_renamer.renamer import Directory
 
 
 class MainFrame(ttk.Frame):
@@ -12,12 +12,12 @@ class MainFrame(ttk.Frame):
 
         # Directory controls
         self.directory_path = tk.StringVar()
+        self.dir = None
 
         directory_lbl = ttk.Label(self, text="Ordner:", anchor="e")
         directory_entry = ttk.Entry(self, textvariable=self.directory_path)
         directory_btn = ttk.Button(self, text="Durchsuchen", command=self.open_folderpicker)
 
-        # TODO Table
         table_frame = ttk.Frame(self)
         table = ttk.Treeview(table_frame, columns="new_filename")
         table.heading("#0", text="Ursprünglicher Dateiname", anchor="w")
@@ -31,14 +31,16 @@ class MainFrame(ttk.Frame):
         table_scroll = ttk.Scrollbar(table_frame, orient=tk.VERTICAL, command=table.yview)
         table['yscrollcommand'] = table_scroll.set
 
+        # table_progress = ttk.Progressbar(table_frame, orient=tk.HORIZONTAL, mode='determinate')
+
         self.table = table
 
         # Footer buttons
         # settings_btn = ttk.Button(self, text="Einstellungen",
         #                          command=controller.show_settings, padding="5")
 
-        preview_btn = ttk.Button(self, text="Vorschau", command=self.read_files, padding="5")
-        start_btn = ttk.Button(self, text="Umbennen", command=lambda: print("Umbennen"), padding="5")
+        preview_btn = ttk.Button(self, text="Vorschau", command=self.generate_new_file_names, padding="5")
+        start_btn = ttk.Button(self, text="Umbennen", command=self.rename, padding="5")
 
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -53,32 +55,42 @@ class MainFrame(ttk.Frame):
         table_frame.grid_rowconfigure(0, weight=1)
         table.grid(row=0, column=0, sticky="nswe")
         table_scroll.grid(row=0, column=1, sticky="nse")
+        # table_progress.grid(row=1, column=0, columnspan="2", sticky="we", pady=(5, 5))
 
         # settings_btn.grid(row=2, column=0, sticky="sw")
         preview_btn.grid(row=2, column=2, sticky="se")
         start_btn.grid(row=2, column=3, sticky="se", padx=(5, 0))
 
-        # TODO Testing
-        self.directory_path.set(os.path.normpath("D:\\Tim\\Pictures\Fotos\\unsortiert Handy 2016"))
-        self.read_files()
-
     def open_folderpicker(self):
         directory = filedialog.askdirectory(initialdir=self.directory_path.get())
         if directory != "":
             self.directory_path.set(directory)
-            self.read_files()
+            self.read_dir()
 
-    def read_files(self):
+    def read_dir(self):
+        self.dir = Directory(self.directory_path.get())
+        self.load_table()
+
+    def generate_new_file_names(self):
+        if self.dir is None:
+            return
+        self.dir.generate_new_file_names()
+        self.load_table()
+
+    def rename(self):
+        self.dir.rename()
+
+    def load_table(self):
         for widget in self.table.get_children():
             self.table.delete(widget)
-        self.load_table(renamer.read_dir(self.directory_path.get()))
-
-    def load_table(self, file_list):
         odd = False
-        for file in file_list:
-            if odd:
-                tag = "odd"
+        for old_file_name, new_file_name in self.dir.file_names:
+
+            odd_even = "odd" if odd else "even"
+
+            if old_file_name == new_file_name:
+                tags = ("nochanges", odd_even)
             else:
-                tag = "even"
-            self.table.insert("", 'end', text=file[0], values=(file[1],), tags=(tag,))
+                tags = (odd_even,)
+            self.table.insert("", 'end', text=old_file_name, values=(new_file_name,), tags=tags)
             odd = not odd
