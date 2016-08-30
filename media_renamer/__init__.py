@@ -22,6 +22,10 @@ class MediaRenamerApp(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
+        # status bar
+        status = ttk.Label(container, text="", relief="solid")
+        self.status = status
+
         # the different views
         self.frames = {}
 
@@ -31,6 +35,8 @@ class MediaRenamerApp(tk.Tk):
             self.frames[F] = frame
 
         self.show_main()
+
+        status.grid(row=1, column=0, sticky="swe")
 
     def show_main(self):
         self.show_frame(MainFrame)

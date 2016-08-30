@@ -10,6 +10,7 @@ from media_renamer.renamer import Directory
 class MainFrame(ttk.Frame):
     def __init__(self, parent, controller, **kwargs):
         ttk.Frame.__init__(self, parent, **kwargs)
+        self.controller = controller
 
         # Directory controls
         self.directory_path = tk.StringVar()
@@ -32,7 +33,7 @@ class MainFrame(ttk.Frame):
         table_scroll = ttk.Scrollbar(table_frame, orient=tk.VERTICAL, command=table.yview)
         table['yscrollcommand'] = table_scroll.set
 
-        # table_progress = ttk.Progressbar(table_frame, orient=tk.HORIZONTAL, mode='determinate')
+        # table_progress = ttk.Progressbar(table_frame, orient=tk.HORIZONTAL, mode='indeterminate')
 
         self.table = table
 
@@ -75,15 +76,19 @@ class MainFrame(ttk.Frame):
     def generate_new_file_names(self):
         if self.dir is None:
             return
+        self.set_status("Vorschau generieren...")
         self.dir.generate_new_file_names()
         self.load_table()
+        self.set_status("Vorschau generieren abgeschlossen")
 
     def rename(self):
+        self.set_status("Umbennen...")
         self.dir.rename()
+        self.clear_table()
+        self.set_status("Umbennen abgeschlossen")
 
     def load_table(self):
-        for widget in self.table.get_children():
-            self.table.delete(widget)
+        self.clear_table()
         odd = False
         for old_file_name, new_file_name in self.dir.file_names:
 
@@ -95,3 +100,10 @@ class MainFrame(ttk.Frame):
                 tags = (odd_even,)
             self.table.insert("", 'end', text=old_file_name, values=(new_file_name,), tags=tags)
             odd = not odd
+
+    def clear_table(self):
+        for widget in self.table.get_children():
+            self.table.delete(widget)
+
+    def set_status(self, text):
+        self.controller.status["text"] = text
