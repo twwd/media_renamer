@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
 
-with open('README.rst') as f:
+with open('README.md') as f:
     readme = f.read()
 
 with open('LICENSE') as f:
@@ -10,7 +11,7 @@ with open('LICENSE') as f:
 setup(
     name='media_renamer',
     version='0.0.1',
-    description='Script for renaming media files as their creation date',
+    description='A simple tool for renaming media files as their creation date',
     long_description=readme,
     author='Tim Walter',
     author_email='tim@twwd.de',
