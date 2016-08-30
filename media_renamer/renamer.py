@@ -61,20 +61,16 @@ def get_older_date_from_file(file_path):
         file_path) else os.path.getctime(
         file_path)
 
-    # check Android file names
-    file_name = os.path.splitext(os.path.basename(file_path))[0][0:14]
-    try:
-        date_from_filename = time.mktime(time.strptime(str(file_name), "%Y%m%d_%H%M%S"))
-    except ValueError:
-        return date
-
-    date = date_from_filename if date_from_filename is not None and date > date_from_filename else date
     return date
 
 
 def generate_new_file_name(file_path):
-    existing_files_pattern = re.compile("\\d+-\\d+-\\d+_\\d+\\.\\d+\\.\\d+(_\\d+)?\..+")
-    if existing_files_pattern.match(str(os.path.basename(file_path))) is not None:
+    existing_files_pattern = re.compile("\d{4}-\d{2}-\d{2}_\d{2}.\d{2}.\d{2}_?\d*")
+
+    file_name = os.path.splitext(os.path.basename(file_path))[0]
+    file_ext = os.path.splitext(file_path)[1].lower()
+
+    if existing_files_pattern.match(str(file_name)) is not None:
         return os.path.basename(file_path)
 
     try:
@@ -85,8 +81,13 @@ def generate_new_file_name(file_path):
         return None
 
     if date is None:
-        date = get_older_date_from_file(file_path)
+        # check Android file names
+        try:
+            date = time.mktime(time.strptime(str(file_name[0:15]), "%Y%m%d_%H%M%S"))
+        except ValueError:
+            date = get_older_date_from_file(file_path)
     else:
+        # handle broken exif data
         fmt = "%Y:%m:%d %H:%M:%S"
         try:
             date = time.mktime(time.strptime(str(date), fmt))
@@ -98,7 +99,5 @@ def generate_new_file_name(file_path):
                 raise v
 
     file_formatted_datetime = (datetime.datetime.fromtimestamp(date)).strftime("%Y-%m-%d_%H.%M.%S")
-
-    file_ext = os.path.splitext(file_path)[1].lower()
 
     return file_formatted_datetime + file_ext
