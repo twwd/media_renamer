@@ -96,7 +96,7 @@ def generate_new_file_name(file_path):
             if ulr:
                 date = time.mktime(time.strptime(str(date)[:-ulr], fmt))
             else:
-                raise v
+                date = get_older_date_from_file(file_path)
 
     file_formatted_datetime = (datetime.datetime.fromtimestamp(date)).strftime("%Y-%m-%d_%H.%M.%S")
 
