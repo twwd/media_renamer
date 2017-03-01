@@ -20,6 +20,9 @@ class MainFrame(ttk.Frame):
         directory_entry = ttk.Entry(self, textvariable=self.directory_path)
         directory_btn = ttk.Button(self, text="Durchsuchen", command=self.open_folderpicker)
 
+        self.directory_path.trace_add(mode="write",
+                                      callback=lambda name, index, mode, var=self.directory_path: self.read_dir())
+
         table_frame = ttk.Frame(self)
         table = ttk.Treeview(table_frame, columns="new_filename")
         table.heading("#0", text="Ursprünglicher Dateiname", anchor="w")
@@ -70,7 +73,10 @@ class MainFrame(ttk.Frame):
             self.read_dir()
 
     def read_dir(self):
-        self.dir = Directory(self.directory_path.get())
+        try:
+            self.dir = Directory(self.directory_path.get())
+        except NotADirectoryError as v:
+            return
         self.load_table()
 
     def generate_new_file_names(self):
