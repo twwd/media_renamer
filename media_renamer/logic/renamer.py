@@ -86,6 +86,7 @@ def generate_new_file_name(file_path):
             date = time.mktime(time.strptime(str(file_name[0:15]), "%Y%m%d_%H%M%S"))
         except ValueError:
             date = get_older_date_from_file(file_path)
+            return file_name + file_ext
     else:
         # handle broken exif data
         fmt = "%Y:%m:%d %H:%M:%S"

@@ -4,8 +4,6 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk
 
-from media_renamer.renamer import Directory
-
 
 class MainFrame(ttk.Frame):
     def __init__(self, parent, controller, **kwargs):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import sys, os
+import sys
+import os
 from cx_Freeze import setup, Executable
 
 base = None
@@ -17,7 +18,7 @@ build_exe_options = {
 }
 
 executables = [
-    Executable("media_renamer/__init__.py",
+    Executable("app.py",
                base=base,
                targetName="MediaRenamer.exe",
                icon="media_renamer/resources/icon.ico"
