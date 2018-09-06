@@ -1,1 +1,3 @@
 exifread
+hachoir
+python-dateutil
