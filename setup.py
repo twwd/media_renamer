@@ -15,7 +15,7 @@ setup(
     long_description=readme,
     author='Tim Walter',
     author_email='tim@twwd.de',
-    url='https://github.com/twwd/MediaRenamer',
+    url='https://github.com/twwd/media_renamer',
     license=license,
     packages=find_packages(exclude=('tests', 'docs'))
 )
