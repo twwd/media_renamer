@@ -3,6 +3,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk
+
 from media_renamer.logic.renamer import Directory
 
 
@@ -43,8 +44,10 @@ class MainFrame(ttk.Frame):
         # settings_btn = ttk.Button(self, text="Einstellungen",
         #                          command=controller.show_settings, padding="5")
 
-        preview_btn = ttk.Button(self, text="Vorschau", command=self.generate_new_file_names, padding="5")
-        start_btn = ttk.Button(self, text="Umbennen", command=self.rename, padding="5")
+        preview_btn = ttk.Button(self, text="Vorschau", command=self.generate_new_file_names, padding="5", state=tk.DISABLED)
+        start_btn = ttk.Button(self, text="Umbennen", command=self.rename, padding="5", state=tk.DISABLED)
+        self.preview_btn = preview_btn
+        self.start_btn = start_btn
 
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -77,6 +80,8 @@ class MainFrame(ttk.Frame):
         except NotADirectoryError:
             return
         self.load_table()
+        self.set_enabled_state(self.preview_btn, True)
+        self.set_enabled_state(self.start_btn, False)
 
     def generate_new_file_names(self):
         if self.dir is None:
@@ -85,6 +90,7 @@ class MainFrame(ttk.Frame):
         self.dir.generate_new_file_names()
         self.load_table()
         self.set_status("Vorschau generieren abgeschlossen")
+        self.set_enabled_state(self.start_btn, True)
 
     def rename(self):
         self.set_status("Umbennen...")
@@ -107,8 +113,17 @@ class MainFrame(ttk.Frame):
             odd = not odd
 
     def clear_table(self):
+        self.set_enabled_state(self.preview_btn, False)
+        self.set_enabled_state(self.start_btn, False)
         for widget in self.table.get_children():
             self.table.delete(widget)
 
     def set_status(self, text):
         self.controller.status["text"] = text
+
+    @staticmethod
+    def set_enabled_state(btn, enabled=False):
+        if enabled:
+            btn.state(["!disabled"])
+        else:
+            btn.state(["disabled"])
