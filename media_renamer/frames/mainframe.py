@@ -74,7 +74,7 @@ class MainFrame(ttk.Frame):
     def read_dir(self):
         try:
             self.dir = Directory(self.directory_path.get())
-        except NotADirectoryError as v:
+        except NotADirectoryError:
             return
         self.load_table()
 

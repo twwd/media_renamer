@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
-
 with open('README.md') as f:
     readme = f.read()
 
 with open('LICENSE') as f:
-    license = f.read()
+    lic = f.read()
 
 setup(
     name='media_renamer',
@@ -16,7 +15,6 @@ setup(
     author='Tim Walter',
     author_email='tim@twwd.de',
     url='https://github.com/twwd/media_renamer',
-    license=license,
+    license=lic,
     packages=find_packages(exclude=('tests', 'docs'))
 )
-
