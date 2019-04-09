@@ -1,3 +1,0 @@
-exifread
-hachoir
-python-dateutil
