@@ -14,7 +14,7 @@ class MediaRenamerApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        tk.Tk.iconbitmap(self, default="media_renamer/resources/icon.ico")
+        # tk.Tk.iconbitmap(self, default="media_renamer/resources/icon.ico")
         tk.Tk.wm_title(self, "Media Renamer")
 
         # create container for widgets
