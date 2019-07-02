@@ -111,17 +111,38 @@ def get_date_from_exif(file_path):
 
 
 def get_date_from_android_filename(file_name):
-    try:
-        return datetime.strptime(str(file_name[-15:]), "%Y%m%d_%H%M%S")
-    except ValueError:
+    d = None
+
+    def check_whatsapp():
         if "-WA" in file_name:
             try:
-                print(str(file_name[4:12]))
                 return datetime.strptime(str(file_name[4:12]), "%Y%m%d")
             except ValueError:
-                return None
-        else:
-            return None
+                pass
+        return None
+
+    def check_signal():
+        if "signal-" in file_name:
+            try:
+                return datetime.strptime(str(file_name[7:]), "%Y-%m-%d-%H%M%S")
+            except ValueError:
+                pass
+        return None
+
+    datetime_pattern_android = re.compile(r".*(\d{4}\d{2}\d{2}_\d{2}\d{2}\d{2}).*")
+
+    matches = datetime_pattern_android.match(file_name)
+
+    if matches is not None:
+        d = datetime.strptime(matches.group(1), "%Y%m%d_%H%M%S")
+
+    if d is None:
+        d = check_whatsapp()
+
+    if d is None:
+        d = check_signal()
+
+    return d
 
 
 def generate_new_file_name(file_path):
