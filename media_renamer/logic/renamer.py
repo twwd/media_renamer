@@ -31,10 +31,10 @@ class Directory:
                 self.file_names.append(
                     [os.path.basename(file), ""])
 
-    def generate_new_file_names(self):
+    def generate_new_file_names(self, ignore_already_renamed: bool = True):
         self.update()
         for item in self.file_names:
-            item[1] = generate_new_file_name(os.path.join(self.path, item[0]))
+            item[1] = generate_new_file_name(os.path.join(self.path, item[0]), ignore_already_renamed)
 
     def rename(self):
         for item in self.file_names:
@@ -59,7 +59,9 @@ class Directory:
 
 
 def get_older_date_from_file(file_path):
-    return datetime.fromtimestamp(os.path.getmtime(file_path) if os.path.getmtime(file_path) < os.path.getctime(file_path) else os.path.getctime(file_path))
+    return datetime.fromtimestamp(
+        os.path.getmtime(file_path) if os.path.getmtime(file_path) < os.path.getctime(file_path) else os.path.getctime(
+            file_path))
 
 
 def get_date_from_hachoir(file_path):
@@ -145,13 +147,13 @@ def get_date_from_android_filename(file_name):
     return d
 
 
-def generate_new_file_name(file_path):
+def generate_new_file_name(file_path, ignore_already_renamed):
     existing_files_pattern = re.compile(r"\d{4}-\d{2}-\d{2}_\d{2}.\d{2}.\d{2}_?\d*")
 
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     file_ext = os.path.splitext(file_path)[1].lower()
 
-    if existing_files_pattern.match(str(file_name)) is not None:
+    if ignore_already_renamed and existing_files_pattern.match(str(file_name)) is not None:
         return os.path.basename(file_path)
 
     date = get_date_from_exif(file_path)
