@@ -9,7 +9,7 @@ from dateutil import tz
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
-ext_list = [".jpg", ".jpeg", ".mov", ".mts", ".mp4", ".avi"]
+ext_list = [".jpg", ".jpeg", ".mov", ".mts", ".mp4", ".avi", ".raf"]
 
 
 class Directory:
