@@ -2,9 +2,11 @@
 
 import os
 import re
+import tempfile
 from datetime import datetime
 
 import exifread
+import rawpy
 from dateutil import tz
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
@@ -53,7 +55,7 @@ class Directory:
                 i = "_01" if i == "" else "_" + "{:0>2d}".format(int(i.strip("_")) + 1)
 
             try:
-                os.rename(old_file_path, new_file_path + i + new_file_ext)
+                os.rename(old_file_path, f"{new_file_path}{i}{new_file_ext}")
             except FileNotFoundError:
                 pass
 
@@ -95,19 +97,37 @@ def get_date_from_hachoir(file_path):
 def get_date_from_exif(file_path):
     try:
         with open(file_path, 'rb') as f:
-            tags = exifread.process_file(f, stop_tag='DateTimeOriginal')
-            date = tags.get('EXIF DateTimeOriginal')
-            # handle broken exif data
-            fmt = "%Y:%m:%d %H:%M:%S"
-            try:
-                date = datetime.strptime(str(date), fmt)
-            except ValueError as v:
-                ulr = len(v.args[0].partition('unconverted data remains: ')[2])
-                if ulr:
-                    date = datetime.strptime(str(date)[:-ulr], fmt)
-                else:
-                    return None
-            return date
+            return _get_date_from_exif(f)
+    except FileNotFoundError:
+        return None
+
+
+def _get_date_from_exif(f):
+    tags = exifread.process_file(f, stop_tag='DateTimeOriginal')
+    date = tags.get('EXIF DateTimeOriginal')
+    # handle broken exif data
+    fmt = "%Y:%m:%d %H:%M:%S"
+    try:
+        date = datetime.strptime(str(date), fmt)
+    except ValueError as v:
+        ulr = len(v.args[0].partition('unconverted data remains: ')[2])
+        if ulr:
+            date = datetime.strptime(str(date)[:-ulr], fmt)
+        else:
+            return None
+    return date
+
+
+def get_date_from_raf(file_path):
+    try:
+        with rawpy.imread(file_path) as raw:
+            thumb = raw.extract_thumb()
+        if thumb.format == rawpy.ThumbFormat.JPEG:
+            # thumb.data is already in JPEG format, save as-is
+            with tempfile.SpooledTemporaryFile(mode='wrb') as f:
+                f.write(thumb.data)
+                return _get_date_from_exif(f)
+
     except FileNotFoundError:
         return None
 
@@ -148,7 +168,7 @@ def get_date_from_android_filename(file_name):
 
 
 def generate_new_file_name(file_path, ignore_already_renamed):
-    existing_files_pattern = re.compile(r"\d{4}-\d{2}-\d{2}_\d{2}.\d{2}.\d{2}_?\d*")
+    existing_files_pattern = re.compile(r"\d{4}-\d{2}-\d{2}_\d{2}.\d{2}.\d{2}(_\d*)?(.*)")
 
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     file_ext = os.path.splitext(file_path)[1].lower()
@@ -157,6 +177,9 @@ def generate_new_file_name(file_path, ignore_already_renamed):
         return os.path.basename(file_path)
 
     date = get_date_from_exif(file_path)
+
+    if date is None and file_ext == '.raf':
+        date = get_date_from_raf(file_path)
 
     if date is None:
         date = get_date_from_android_filename(file_name)
@@ -169,4 +192,9 @@ def generate_new_file_name(file_path, ignore_already_renamed):
 
     file_formatted_datetime = date.strftime("%Y-%m-%d_%H.%M.%S")
 
-    return file_formatted_datetime + file_ext
+    # Preserve Android moving pictures
+    suffix = ''
+    if '.MP' in file_name:
+        suffix = '.MP'
+
+    return file_formatted_datetime + suffix + file_ext
