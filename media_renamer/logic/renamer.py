@@ -170,7 +170,7 @@ def get_date_from_android_filename(file_name):
 
 
 def generate_new_file_name(file_path, ignore_already_renamed):
-    existing_files_pattern = re.compile(r"\d{4}-\d{2}-\d{2}_\d{2}.\d{2}.\d{2}(_\d*)?(.*)")
+    existing_files_pattern = re.compile(r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}(_\d*)?(.*)")
 
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     file_ext = os.path.splitext(file_path)[1].lower()
@@ -192,7 +192,7 @@ def generate_new_file_name(file_path, ignore_already_renamed):
     if date is None:
         date = get_older_date_from_file(file_path)
 
-    file_formatted_datetime = date.strftime("%Y-%m-%d_%H.%M.%S")
+    file_formatted_datetime = date.strftime("%Y-%m-%d_%H-%M-%S")
 
     # Preserve Android moving and panorama pictures
     suffix = ''
