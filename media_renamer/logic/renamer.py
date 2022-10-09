@@ -77,21 +77,20 @@ def get_date_from_hachoir(file_path):
         return None
     try:
         # For the tested files, it seems that the timestamp is saved in UTC, so we convert it to local time
-        date_utc = datetime.strptime(str(metadata.get('creation_date')), "%Y-%m-%d %H:%M:%S")
-
-        from_zone = tz.tzutc()
-        to_zone = tz.tzlocal()
-
-        # Tell the datetime object that it's in UTC time zone since
-        # datetime objects are 'naive' by default
-        date_utc = date_utc.replace(tzinfo=from_zone)
-
-        # Convert time zone
-        local_date = date_utc.astimezone(to_zone)
-
-        return local_date
+        return _utc_to_local(datetime.strptime(str(metadata.get('creation_date')), "%Y-%m-%d %H:%M:%S"))
     except ValueError:
         return None
+
+
+def _utc_to_local(date_utc):
+    from_zone = tz.tzutc()
+    to_zone = tz.tzlocal()
+    # Tell the datetime object that it's in UTC time zone since
+    # datetime objects are 'naive' by default
+    date_utc = date_utc.replace(tzinfo=from_zone)
+    # Convert time zone
+    local_date = date_utc.astimezone(to_zone)
+    return local_date
 
 
 def get_date_from_exif(file_path):
@@ -157,6 +156,9 @@ def get_date_from_android_filename(file_name):
 
     if matches is not None:
         d = datetime.strptime(matches.group(1), "%Y%m%d_%H%M%S")
+        # Pixel device use UTC time as filename
+        if d is not None and file_name.startswith('PXL'):
+            d = _utc_to_local(d)
 
     if d is None:
         d = check_whatsapp()
@@ -192,9 +194,19 @@ def generate_new_file_name(file_path, ignore_already_renamed):
 
     file_formatted_datetime = date.strftime("%Y-%m-%d_%H.%M.%S")
 
-    # Preserve Android moving pictures
+    # Preserve Android moving and panorama pictures
     suffix = ''
-    if '.MP' in file_name:
-        suffix = '.MP'
+    for preserved_suffix in ['.MP', '.PANO', '.NIGHT']:
+        if preserved_suffix in file_name:
+            suffix += preserved_suffix
+
+    # Handle old Android filenames for moving and panorame pictures
+    prefix_map = {
+        'MVIMG': '.MP',
+        'PANO': '.PANO'
+    }
+    for prefix, mapped_suffix in prefix_map.items():
+        if file_name.startswith(prefix):
+            suffix += mapped_suffix
 
     return file_formatted_datetime + suffix + file_ext
