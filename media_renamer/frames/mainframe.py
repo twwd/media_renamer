@@ -20,6 +20,7 @@ class MainFrame(ttk.Frame):
         directory_entry = ttk.Entry(self, textvariable=self.directory_path)
         directory_btn = ttk.Button(self, text="Durchsuchen", command=self.open_folderpicker)
 
+        directory_entry.bind('<Control-KeyRelease-a>', func=MainFrame.select_all)
         self.directory_path.trace_add(mode="write",
                                       callback=lambda name, index, mode, var=self.directory_path: self.read_dir())
 
@@ -137,3 +138,10 @@ class MainFrame(ttk.Frame):
             btn.state(["!disabled"])
         else:
             btn.state(["disabled"])
+
+    @staticmethod
+    def select_all(event):
+        # select text
+        event.widget.select_range(0, 'end')
+        # move cursor to the end
+        event.widget.icursor('end')
