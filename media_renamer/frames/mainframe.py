@@ -46,9 +46,14 @@ class MainFrame(ttk.Frame):
         #                          command=controller.show_settings, padding="5")
 
         self.ignore_already_renamed = tk.BooleanVar(value=True)
+        self.use_filesystem_timestamps = tk.BooleanVar(value=False)
         ignore_already_renamed_checkbox = tk.Checkbutton(self, text='Bereits umbenannte Dateien ignorieren?',
                                                          variable=self.ignore_already_renamed,
                                                          onvalue=True, offvalue=False, command=self.re_enable_preview)
+        use_filesystem_timestamps_checkbox = tk.Checkbutton(self, text='Zeitstempel des Dateisystems nutzen?',
+                                                            variable=self.use_filesystem_timestamps,
+                                                            onvalue=True, offvalue=False,
+                                                            command=self.re_enable_preview)
         preview_btn = ttk.Button(self, text="Vorschau", command=self.generate_new_file_names, padding="5",
                                  state=tk.DISABLED)
         start_btn = ttk.Button(self, text="Umbennen", command=self.rename, padding="5", state=tk.DISABLED)
@@ -72,6 +77,7 @@ class MainFrame(ttk.Frame):
 
         # settings_btn.grid(row=2, column=0, sticky="sw")
         ignore_already_renamed_checkbox.grid(row=2, column=0, sticky="sw")
+        use_filesystem_timestamps_checkbox.grid(row=2, column=1, sticky="sw")
         preview_btn.grid(row=2, column=2, sticky="se")
         start_btn.grid(row=2, column=3, sticky="se", padx=(5, 0))
 
@@ -94,7 +100,7 @@ class MainFrame(ttk.Frame):
         if self.dir is None:
             return
         self.set_status("Vorschau generieren...")
-        self.dir.generate_new_file_names(self.ignore_already_renamed.get())
+        self.dir.generate_new_file_names(self.ignore_already_renamed.get(), self.use_filesystem_timestamps.get())
         self.load_table()
         self.set_status("Vorschau generieren abgeschlossen")
         self.set_enabled_state(self.start_btn, True)

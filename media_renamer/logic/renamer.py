@@ -33,10 +33,12 @@ class Directory:
                 self.file_names.append(
                     [os.path.basename(file), ""])
 
-    def generate_new_file_names(self, ignore_already_renamed: bool = True):
+    def generate_new_file_names(self, ignore_already_renamed: bool = True, use_filesystem_timestamps: bool = False):
         self.update()
         for item in self.file_names:
-            item[1] = generate_new_file_name(os.path.join(self.path, item[0]), ignore_already_renamed)
+            item[1] = generate_new_file_name(os.path.join(self.path, item[0]),
+                                             ignore_already_renamed,
+                                             use_filesystem_timestamps)
 
     def rename(self):
         for item in self.file_names:
@@ -169,7 +171,7 @@ def get_date_from_android_filename(file_name):
     return d
 
 
-def generate_new_file_name(file_path, ignore_already_renamed):
+def generate_new_file_name(file_path, ignore_already_renamed, use_filesystem_timestamps):
     existing_files_pattern = re.compile(r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}(_\d*)?(.*)")
 
     file_name = os.path.splitext(os.path.basename(file_path))[0]
@@ -189,8 +191,12 @@ def generate_new_file_name(file_path, ignore_already_renamed):
     if date is None:
         date = get_date_from_hachoir(file_path)
 
-    if date is None:
+    if date is None and use_filesystem_timestamps:
         date = get_older_date_from_file(file_path)
+
+    # if we did not find any date, use the original filename
+    if date is None:
+        return os.path.basename(file_path)
 
     file_formatted_datetime = date.strftime("%Y-%m-%d_%H-%M-%S")
 
