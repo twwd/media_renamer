@@ -152,7 +152,7 @@ def get_date_from_android_filename(file_name):
                 pass
         return None
 
-    datetime_pattern_android = re.compile(r".*(\d{4}\d{2}\d{2}_\d{2}\d{2}\d{2}).*")
+    datetime_pattern_android = re.compile(r".*(20\d{2}\d{2}\d{2}_\d{2}\d{2}\d{2}).*")
 
     matches = datetime_pattern_android.match(file_name)
 
@@ -202,11 +202,11 @@ def generate_new_file_name(file_path, ignore_already_renamed, use_filesystem_tim
 
     # Preserve Android moving and panorama pictures
     suffix = ''
-    for preserved_suffix in ['.MP', '.PANO', '.NIGHT']:
+    for preserved_suffix in ['.MP', '.PANO', '.NIGHT', '.LS']:
         if preserved_suffix in file_name:
             suffix += preserved_suffix
 
-    # Handle old Android filenames for moving and panorame pictures
+    # Handle old Android filenames for moving and panorama pictures
     prefix_map = {
         'MVIMG': '.MP',
         'PANO': '.PANO'
