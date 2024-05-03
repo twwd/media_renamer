@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "media-renamer"
+version = "0.2.0"
+description = "Easily rename photos and videos according to the creation date"
+authors = ["Tim Walter <tim@twwd.de>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+hachoir = "^3.3.0"
+exifread = "^3.0.0"
+rawpy = "^0.20.0"
+python-dateutil = "^2.9.0.post0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.scripts]
+media_renamer = 'media_renamer.app:run'

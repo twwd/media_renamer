@@ -1,18 +1,18 @@
 # Media Renamer
 
-A simple tool for renaming media files as their creation date.
+Easily rename photos and videos according to the creation date
 
 ## Installation
 
-You need to have [pipenv](https://pipenv.pypa.io/en/latest/index.html) installed.
+You need to have [poetry](https://python-poetry.org/) installed.
 
-`pipenv install`
+`poetry install`
 
 ## Launch
 
 You can launch the GUI with:
 
-`pipenv run app`
+`poetry run media_renamer`
 
 ## Example
 

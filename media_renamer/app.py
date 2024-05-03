@@ -54,3 +54,7 @@ def run():
     app = MediaRenamerApp()
     app.geometry("800x600")
     app.mainloop()
+
+
+if __name__ == '__main__':
+    run()

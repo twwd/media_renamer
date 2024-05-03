@@ -84,7 +84,7 @@ def get_date_from_hachoir(file_path):
         return None
 
 
-def _utc_to_local(date_utc):
+def _utc_to_local(date_utc: datetime):
     from_zone = tz.tzutc()
     to_zone = tz.tzlocal()
     # Tell the datetime object that it's in UTC time zone since
