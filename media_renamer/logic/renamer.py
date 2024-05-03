@@ -7,11 +7,11 @@ from datetime import datetime
 
 import exifread
 import rawpy
-from dateutil import tz
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
 from media_renamer.logic.android import get_date_from_android_filename
+from media_renamer.logic.time import utc_to_local
 
 ext_list = [".jpg", ".jpeg", ".mov", ".mts", ".mp4", ".avi", ".raf"]
 
@@ -82,20 +82,9 @@ def get_date_from_hachoir(file_path):
         return None
     try:
         # For the tested files, it seems that the timestamp is saved in UTC, so we convert it to local time
-        return _utc_to_local(datetime.strptime(str(metadata.get("creation_date")), "%Y-%m-%d %H:%M:%S"))
+        return utc_to_local(datetime.strptime(str(metadata.get("creation_date")), "%Y-%m-%d %H:%M:%S"))
     except ValueError:
         return None
-
-
-def _utc_to_local(date_utc: datetime):
-    from_zone = tz.tzutc()
-    to_zone = tz.tzlocal()
-    # Tell the datetime object that it's in UTC time zone since
-    # datetime objects are 'naive' by default
-    date_utc = date_utc.replace(tzinfo=from_zone)
-    # Convert time zone
-    local_date = date_utc.astimezone(to_zone)
-    return local_date
 
 
 def get_date_from_exif(file_path):

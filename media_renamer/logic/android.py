@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-from media_renamer.logic.renamer import _utc_to_local
+from media_renamer.logic.time import utc_to_local
 
 
 def check_whatsapp(file_name: str):
@@ -33,7 +33,7 @@ def get_date_from_android_filename(file_name: str):
         d = datetime.strptime(matches.group(1), "%Y%m%d_%H%M%S")
         # Pixel device use UTC time as filename
         if d is not None and file_name.startswith("PXL"):
-            d = _utc_to_local(d)
+            d = utc_to_local(d)
 
     if d is None:
         d = check_whatsapp(file_name)
