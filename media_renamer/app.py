@@ -30,10 +30,10 @@ class MediaRenamerApp(tk.Tk):
         # the different views
         self.frames = {}
 
-        for F in [MainFrame, SettingsFrame]:
-            frame = F(container, self, padding="10")
+        for f in [MainFrame, SettingsFrame]:
+            frame = f(container, self, padding="10")
             frame.grid(row=0, column=0, sticky="nsew")
-            self.frames[F] = frame
+            self.frames[f] = frame
 
         self.show_main()
 

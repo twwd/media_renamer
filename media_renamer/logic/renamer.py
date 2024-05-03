@@ -11,6 +11,8 @@ from dateutil import tz
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
+from media_renamer.logic.android import get_date_from_android_filename
+
 ext_list = [".jpg", ".jpeg", ".mov", ".mts", ".mp4", ".avi", ".raf"]
 
 
@@ -30,14 +32,12 @@ class Directory:
         lst.sort()
         for file in lst:
             if os.path.splitext(file)[1].lower() in ext_list:
-                self.file_names.append(
-                    [os.path.basename(file), ""])
+                self.file_names.append([os.path.basename(file), ""])
 
     def generate_new_file_names(self, ignore_already_renamed: bool = True, use_filesystem_timestamps: bool = False):
         self.update()
         for item in self.file_names:
-            item[1] = generate_new_file_name(os.path.join(self.path, item[0]),
-                                             ignore_already_renamed,
+            item[1] = generate_new_file_name(os.path.join(self.path, item[0]), ignore_already_renamed,
                                              use_filesystem_timestamps)
 
     def rename(self):
@@ -133,45 +133,7 @@ def get_date_from_raf(file_path):
         return None
 
 
-def get_date_from_android_filename(file_name):
-    d = None
-
-    def check_whatsapp():
-        if "-WA" in file_name:
-            try:
-                return datetime.strptime(str(file_name[4:12]), "%Y%m%d")
-            except ValueError:
-                pass
-        return None
-
-    def check_signal():
-        if "signal-" in file_name:
-            try:
-                return datetime.strptime(str(file_name[7:]), "%Y-%m-%d-%H%M%S")
-            except ValueError:
-                pass
-        return None
-
-    datetime_pattern_android = re.compile(r".*(20\d{2}\d{2}\d{2}_\d{2}\d{2}\d{2}).*")
-
-    matches = datetime_pattern_android.match(file_name)
-
-    if matches is not None:
-        d = datetime.strptime(matches.group(1), "%Y%m%d_%H%M%S")
-        # Pixel device use UTC time as filename
-        if d is not None and file_name.startswith('PXL'):
-            d = _utc_to_local(d)
-
-    if d is None:
-        d = check_whatsapp()
-
-    if d is None:
-        d = check_signal()
-
-    return d
-
-
-def generate_new_file_name(file_path, ignore_already_renamed, use_filesystem_timestamps):
+def generate_new_file_name(file_path: str, ignore_already_renamed: bool, use_filesystem_timestamps: bool) -> str:
     existing_files_pattern = re.compile(r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}(_\d*)?(.*)")
 
     file_name = os.path.splitext(os.path.basename(file_path))[0]
@@ -180,19 +142,7 @@ def generate_new_file_name(file_path, ignore_already_renamed, use_filesystem_tim
     if ignore_already_renamed and existing_files_pattern.match(str(file_name)) is not None:
         return os.path.basename(file_path)
 
-    date = get_date_from_exif(file_path)
-
-    if date is None and file_ext == '.raf':
-        date = get_date_from_raf(file_path)
-
-    if date is None:
-        date = get_date_from_android_filename(file_name)
-
-    if date is None:
-        date = get_date_from_hachoir(file_path)
-
-    if date is None and use_filesystem_timestamps:
-        date = get_older_date_from_file(file_path)
+    date = get_date(file_name, file_ext, file_path, use_filesystem_timestamps)
 
     # if we did not find any date, use the original filename
     if date is None:
@@ -207,12 +157,22 @@ def generate_new_file_name(file_path, ignore_already_renamed, use_filesystem_tim
             suffix += preserved_suffix
 
     # Handle old Android filenames for moving and panorama pictures
-    prefix_map = {
-        'MVIMG': '.MP',
-        'PANO': '.PANO'
-    }
+    prefix_map = {'MVIMG': '.MP', 'PANO': '.PANO'}
     for prefix, mapped_suffix in prefix_map.items():
         if file_name.startswith(prefix):
             suffix += mapped_suffix
 
     return file_formatted_datetime + suffix + file_ext
+
+
+def get_date(file_name: str, file_ext: str, file_path: str, use_filesystem_timestamps: bool) -> datetime | None:
+    date = get_date_from_exif(file_path)
+    if date is None and file_ext == '.raf':
+        date = get_date_from_raf(file_path)
+    if date is None:
+        date = get_date_from_android_filename(file_name)
+    if date is None:
+        date = get_date_from_hachoir(file_path)
+    if date is None and use_filesystem_timestamps:
+        date = get_older_date_from_file(file_path)
+    return date
