@@ -20,9 +20,10 @@ class MainFrame(ttk.Frame):
         directory_entry = ttk.Entry(self, textvariable=self.directory_path)
         directory_btn = ttk.Button(self, text="Durchsuchen", command=self.open_folderpicker)
 
-        directory_entry.bind('<Control-KeyRelease-a>', func=MainFrame.select_all)
-        self.directory_path.trace_add(mode="write",
-                                      callback=lambda name, index, mode, var=self.directory_path: self.read_dir())
+        directory_entry.bind("<Control-KeyRelease-a>", func=MainFrame.select_all)
+        self.directory_path.trace_add(
+            mode="write", callback=lambda name, index, mode, var=self.directory_path: self.read_dir()
+        )
 
         table_frame = ttk.Frame(self)
         table = ttk.Treeview(table_frame, columns="new_filename")
@@ -30,12 +31,12 @@ class MainFrame(ttk.Frame):
         table.column("#0", anchor="w")
         table.heading("new_filename", text="Neuer Dateiname", anchor="w")
         table.column("new_filename", anchor="w")
-        table.tag_configure('even', background='#EFEFEF')
-        table.tag_configure('odd', background='#FFFFFF')
-        table.tag_configure('nochanges', foreground="#888888")
+        table.tag_configure("even", background="#EFEFEF")
+        table.tag_configure("odd", background="#FFFFFF")
+        table.tag_configure("nochanges", foreground="#888888")
 
         table_scroll = ttk.Scrollbar(table_frame, orient=tk.VERTICAL, command=table.yview)
-        table['yscrollcommand'] = table_scroll.set
+        table["yscrollcommand"] = table_scroll.set
 
         # table_progress = ttk.Progressbar(table_frame, orient=tk.HORIZONTAL, mode='indeterminate')
 
@@ -47,15 +48,25 @@ class MainFrame(ttk.Frame):
 
         self.ignore_already_renamed = tk.BooleanVar(value=True)
         self.use_filesystem_timestamps = tk.BooleanVar(value=False)
-        ignore_already_renamed_checkbox = tk.Checkbutton(self, text='Bereits umbenannte Dateien ignorieren?',
-                                                         variable=self.ignore_already_renamed,
-                                                         onvalue=True, offvalue=False, command=self.re_enable_preview)
-        use_filesystem_timestamps_checkbox = tk.Checkbutton(self, text='Zeitstempel des Dateisystems nutzen?',
-                                                            variable=self.use_filesystem_timestamps,
-                                                            onvalue=True, offvalue=False,
-                                                            command=self.re_enable_preview)
-        preview_btn = ttk.Button(self, text="Vorschau", command=self.generate_new_file_names, padding="5",
-                                 state=tk.DISABLED)
+        ignore_already_renamed_checkbox = tk.Checkbutton(
+            self,
+            text="Bereits umbenannte Dateien ignorieren?",
+            variable=self.ignore_already_renamed,
+            onvalue=True,
+            offvalue=False,
+            command=self.re_enable_preview,
+        )
+        use_filesystem_timestamps_checkbox = tk.Checkbutton(
+            self,
+            text="Zeitstempel des Dateisystems nutzen?",
+            variable=self.use_filesystem_timestamps,
+            onvalue=True,
+            offvalue=False,
+            command=self.re_enable_preview,
+        )
+        preview_btn = ttk.Button(
+            self, text="Vorschau", command=self.generate_new_file_names, padding="5", state=tk.DISABLED
+        )
         start_btn = ttk.Button(self, text="Umbennen", command=self.rename, padding="5", state=tk.DISABLED)
         self.preview_btn = preview_btn
         self.start_btn = start_btn
@@ -115,14 +126,13 @@ class MainFrame(ttk.Frame):
         self.clear_table()
         odd = False
         for old_file_name, new_file_name in self.dir.file_names:
-
             odd_even = "odd" if odd else "even"
 
             if old_file_name == new_file_name:
                 tags = ("nochanges", odd_even)
             else:
                 tags = (odd_even,)
-            self.table.insert("", 'end', text=old_file_name, values=(new_file_name,), tags=tags)
+            self.table.insert("", "end", text=old_file_name, values=(new_file_name,), tags=tags)
             odd = not odd
 
     def clear_table(self):
@@ -148,6 +158,6 @@ class MainFrame(ttk.Frame):
     @staticmethod
     def select_all(event):
         # select text
-        event.widget.select_range(0, 'end')
+        event.widget.select_range(0, "end")
         # move cursor to the end
-        event.widget.icursor('end')
+        event.widget.icursor("end")

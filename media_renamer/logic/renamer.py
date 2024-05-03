@@ -37,15 +37,16 @@ class Directory:
     def generate_new_file_names(self, ignore_already_renamed: bool = True, use_filesystem_timestamps: bool = False):
         self.update()
         for item in self.file_names:
-            item[1] = generate_new_file_name(os.path.join(self.path, item[0]), ignore_already_renamed,
-                                             use_filesystem_timestamps)
+            item[1] = generate_new_file_name(
+                os.path.join(self.path, item[0]), ignore_already_renamed, use_filesystem_timestamps
+            )
 
     def rename(self):
         for item in self.file_names:
             old_file_path = os.path.join(self.path, item[0])
             new_file_path = os.path.join(self.path, item[1])
 
-            if old_file_path == new_file_path or item[1] == '':
+            if old_file_path == new_file_path or item[1] == "":
                 continue
 
             # Prevent duplicate file names
@@ -64,8 +65,10 @@ class Directory:
 
 def get_older_date_from_file(file_path):
     return datetime.fromtimestamp(
-        os.path.getmtime(file_path) if os.path.getmtime(file_path) < os.path.getctime(file_path) else os.path.getctime(
-            file_path))
+        os.path.getmtime(file_path)
+        if os.path.getmtime(file_path) < os.path.getctime(file_path)
+        else os.path.getctime(file_path)
+    )
 
 
 def get_date_from_hachoir(file_path):
@@ -79,7 +82,7 @@ def get_date_from_hachoir(file_path):
         return None
     try:
         # For the tested files, it seems that the timestamp is saved in UTC, so we convert it to local time
-        return _utc_to_local(datetime.strptime(str(metadata.get('creation_date')), "%Y-%m-%d %H:%M:%S"))
+        return _utc_to_local(datetime.strptime(str(metadata.get("creation_date")), "%Y-%m-%d %H:%M:%S"))
     except ValueError:
         return None
 
@@ -97,21 +100,21 @@ def _utc_to_local(date_utc: datetime):
 
 def get_date_from_exif(file_path):
     try:
-        with open(file_path, 'rb') as f:
+        with open(file_path, "rb") as f:
             return _get_date_from_exif(f)
     except FileNotFoundError:
         return None
 
 
 def _get_date_from_exif(f):
-    tags = exifread.process_file(f, stop_tag='DateTimeOriginal')
-    date = tags.get('EXIF DateTimeOriginal')
+    tags = exifread.process_file(f, stop_tag="DateTimeOriginal")
+    date = tags.get("EXIF DateTimeOriginal")
     # handle broken exif data
     fmt = "%Y:%m:%d %H:%M:%S"
     try:
         date = datetime.strptime(str(date), fmt)
     except ValueError as v:
-        ulr = len(v.args[0].partition('unconverted data remains: ')[2])
+        ulr = len(v.args[0].partition("unconverted data remains: ")[2])
         if ulr:
             date = datetime.strptime(str(date)[:-ulr], fmt)
         else:
@@ -125,7 +128,7 @@ def get_date_from_raf(file_path):
             thumb = raw.extract_thumb()
         if thumb.format == rawpy.ThumbFormat.JPEG:
             # thumb.data is already in JPEG format, save as-is
-            with tempfile.SpooledTemporaryFile(mode='wrb') as f:
+            with tempfile.SpooledTemporaryFile(mode="wrb") as f:
                 f.write(thumb.data)
                 return _get_date_from_exif(f)
 
@@ -151,13 +154,13 @@ def generate_new_file_name(file_path: str, ignore_already_renamed: bool, use_fil
     file_formatted_datetime = date.strftime("%Y-%m-%d_%H-%M-%S")
 
     # Preserve Android moving and panorama pictures
-    suffix = ''
-    for preserved_suffix in ['.MP', '.PANO', '.NIGHT', '.LS']:
+    suffix = ""
+    for preserved_suffix in [".MP", ".PANO", ".NIGHT", ".LS"]:
         if preserved_suffix in file_name:
             suffix += preserved_suffix
 
     # Handle old Android filenames for moving and panorama pictures
-    prefix_map = {'MVIMG': '.MP', 'PANO': '.PANO'}
+    prefix_map = {"MVIMG": ".MP", "PANO": ".PANO"}
     for prefix, mapped_suffix in prefix_map.items():
         if file_name.startswith(prefix):
             suffix += mapped_suffix
@@ -167,7 +170,7 @@ def generate_new_file_name(file_path: str, ignore_already_renamed: bool, use_fil
 
 def get_date(file_name: str, file_ext: str, file_path: str, use_filesystem_timestamps: bool) -> datetime | None:
     date = get_date_from_exif(file_path)
-    if date is None and file_ext == '.raf':
+    if date is None and file_ext == ".raf":
         date = get_date_from_raf(file_path)
     if date is None:
         date = get_date_from_android_filename(file_name)

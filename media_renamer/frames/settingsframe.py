@@ -8,10 +8,8 @@ class SettingsFrame(ttk.Frame):
         label = ttk.Label(self, text="Einstellungen")
         label.pack(pady=10, padx=10)
 
-        save_btn = ttk.Button(self, text="Speichern",
-                              command=controller.show_main)
+        save_btn = ttk.Button(self, text="Speichern", command=controller.show_main)
         save_btn.pack()
 
-        cancel_btn = ttk.Button(self, text="Abbrechen",
-                                command=controller.show_main)
+        cancel_btn = ttk.Button(self, text="Abbrechen", command=controller.show_main)
         cancel_btn.pack()
