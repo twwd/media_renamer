@@ -26,6 +26,11 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 media_renamer = 'media_renamer.app:run'
 
+[tool.poetry-pyinstaller-plugin]
+
+[tool.poetry-pyinstaller-plugin.scripts]
+media_renamer = "media_renamer/app.py"
+
 [tool.ruff]
 include = ["media_renamer/**/*.py",
     "test/**/*.py"]

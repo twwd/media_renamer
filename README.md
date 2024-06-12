@@ -17,3 +17,11 @@ You can launch the GUI with:
 ## Example
 
 `DSCF2053.RAF` → `2021-12-12_17-28-55.raf`
+
+## Development
+
+### Build with PyInstaller
+
+Ensure, that you have the poetry plugin for PyInstaller: `poetry self add poetry-pyinstaller-plugin`.
+
+Then, you can package the application with all of its dependencies into a single folder with `poetry build`.
