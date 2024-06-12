@@ -1,0 +1,30 @@
+name: Bundle for Windows
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    environment: dev
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5.1.0
+      with:
+         python-version: '3.12'
+         cache: 'poetry'
+
+    - name: 'Resolve Project Dependencies'
+      shell: pwsh # For Linux, use bash
+      run: |
+        pip install poetry
+        poetry self add poetry-pyinstaller-plugin
+        poetry install
+
+    - name: 'Build'
+      shell: pwsh
+      run: poetry run build
