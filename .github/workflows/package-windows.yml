@@ -4,6 +4,9 @@ on:
   push:
     branches: ["master"]
 
+env:
+  PIP_PROGRESS_BAR: "off"
+
 jobs:
   build-and-deploy:
     runs-on: windows-latest
@@ -22,6 +25,7 @@ jobs:
       shell: pwsh # For Linux, use bash
       run: |
         pip install poetry
+        poetry config virtualenvs.in-project true
         poetry self add poetry-pyinstaller-plugin
         poetry install
 
