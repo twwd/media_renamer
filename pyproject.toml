@@ -29,7 +29,7 @@ media_renamer = 'media_renamer.app:run'
 [tool.poetry-pyinstaller-plugin]
 
 [tool.poetry-pyinstaller-plugin.scripts]
-media_renamer = "media_renamer/app.py"
+media_renamer = { source = "media_renamer/app.py", console = false, windowed = true }
 
 [tool.ruff]
 include = ["media_renamer/**/*.py",
