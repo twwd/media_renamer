@@ -8,7 +8,7 @@ env:
   PIP_PROGRESS_BAR: "off"
 
 jobs:
-  build-and-deploy:
+  build-win:
     runs-on: windows-latest
     environment: dev
     steps:
@@ -32,3 +32,9 @@ jobs:
     - name: 'Build'
       shell: pwsh
       run: poetry build
+
+    - name: 'Store Windows Artifacts'
+      uses: actions/upload-artifact@v4
+      with:
+        name: media-renamer-win64
+        path: dist\pyinstaller\win_amd64\media_renamer
