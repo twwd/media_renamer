@@ -144,7 +144,7 @@ def generate_new_file_name(file_path: str, ignore_already_renamed: bool, use_fil
 
     # Preserve Android moving and panorama pictures
     suffix = ""
-    for preserved_suffix in [".MP", ".PANO", ".NIGHT", ".LS"]:
+    for preserved_suffix in [".MP", ".PANO", ".NIGHT", ".LS", ".LONG_EXPOSURE-01.COVER", ".LONG_EXPOSURE-02.ORIGINAL"]:
         if preserved_suffix in file_name:
             suffix += preserved_suffix
 
