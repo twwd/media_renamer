@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-
+import logging
 import os
 import re
 import tempfile
@@ -14,6 +13,8 @@ from media_renamer.constants.android import ANDROID_SUFFIXES, ANDROID_OLD_PREFIX
 from media_renamer.constants.files import SUPPORTED_FILE_EXTENSIONS, TARGET_FILE_PATTERN
 from media_renamer.logic.android import get_date_from_android_filename
 from media_renamer.logic.time import utc_to_local
+
+logger = logging.getLogger(__name__)
 
 
 class Directory:
@@ -131,15 +132,18 @@ def generate_new_file_name(
     existing_files_pattern = re.compile(rf"{TARGET_FILE_PATTERN}(_\d*)?(.*)")
 
     file_name = os.path.splitext(os.path.basename(file_path))[0]
+    logger.debug(f"Generating new file name for {file_name}")
     file_ext = os.path.splitext(file_path)[1].lower()
 
     if ignore_already_renamed and existing_files_pattern.match(str(file_name)) is not None:
+        logger.debug("File is already correctly renamed")
         return os.path.basename(file_path)
 
     date = get_date(file_name, file_ext, file_path, use_filesystem_timestamps)
 
     # if we did not find any date, use the original filename
     if date is None:
+        logger.debug(f"No date found for {file_name}")
         return os.path.basename(file_path)
 
     file_formatted_datetime = date.strftime("%Y-%m-%d_%H-%M-%S")
@@ -148,11 +152,13 @@ def generate_new_file_name(
     suffix = ""
     for preserved_suffix in ANDROID_SUFFIXES:
         if preserved_suffix in file_name:
+            logger.debug(f"Found suffix {preserved_suffix}")
             suffix += preserved_suffix
 
     # Handle old Android filenames for moving and panorama pictures
     for prefix, mapped_suffix in ANDROID_OLD_PREFIX_TO_NEW_SUFFIX.items():
         if file_name.startswith(prefix):
+            logger.debug(f"Found prefix {prefix}, map it to suffix {mapped_suffix}")
             suffix += mapped_suffix
 
     # Keep number suffixes from importing tools
