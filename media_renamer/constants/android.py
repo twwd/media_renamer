@@ -1,0 +1,7 @@
+import re
+
+ANDROID_SUFFIXES = [".MP", ".PANO", ".NIGHT", ".LS", ".LONG_EXPOSURE-01.COVER", ".LONG_EXPOSURE-02.ORIGINAL"]
+
+ANDROID_OLD_PREFIX_TO_NEW_SUFFIX = {"MVIMG": ".MP", "PANO": ".PANO"}
+
+ANDROID_FILENAME_PATTERN = re.compile(r".*(20\d{2}\d{2}\d{2}_\d{2}\d{2}\d{2}).*")

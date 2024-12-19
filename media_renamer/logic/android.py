@@ -1,6 +1,6 @@
-import re
 from datetime import datetime
 
+from media_renamer.constants.android import ANDROID_FILENAME_PATTERN
 from media_renamer.logic.time import utc_to_local
 
 
@@ -24,10 +24,7 @@ def check_signal(file_name: str):
 
 def get_date_from_android_filename(file_name: str):
     d = None
-
-    datetime_pattern_android = re.compile(r".*(20\d{2}\d{2}\d{2}_\d{2}\d{2}\d{2}).*")
-
-    matches = datetime_pattern_android.match(file_name)
+    matches = ANDROID_FILENAME_PATTERN.match(file_name)
 
     if matches is not None:
         d = datetime.strptime(matches.group(1), "%Y%m%d_%H%M%S")

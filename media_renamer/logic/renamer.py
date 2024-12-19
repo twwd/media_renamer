@@ -10,12 +10,10 @@ import rawpy
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
+from media_renamer.constants.android import ANDROID_SUFFIXES, ANDROID_OLD_PREFIX_TO_NEW_SUFFIX
+from media_renamer.constants.files import SUPPORTED_FILE_EXTENSIONS, TARGET_FILE_PATTERN
 from media_renamer.logic.android import get_date_from_android_filename
 from media_renamer.logic.time import utc_to_local
-
-TARGET_FILE_PATTERN = r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}"
-
-ext_list = [".jpg", ".jpeg", ".mov", ".mts", ".mp4", ".avi", ".raf"]
 
 
 class Directory:
@@ -33,7 +31,7 @@ class Directory:
         lst = os.listdir(self.path)
         lst.sort()
         for file in lst:
-            if os.path.splitext(file)[1].lower() in ext_list:
+            if os.path.splitext(file)[1].lower() in SUPPORTED_FILE_EXTENSIONS:
                 self.file_names.append([os.path.basename(file), ""])
 
     def generate_new_file_names(self, ignore_already_renamed: bool = True, use_filesystem_timestamps: bool = False):
@@ -127,8 +125,10 @@ def get_date_from_raf(file_path):
         return None
 
 
-def generate_new_file_name(file_path: str, ignore_already_renamed: bool, use_filesystem_timestamps: bool) -> str:
-    existing_files_pattern = re.compile(fr"{TARGET_FILE_PATTERN}(_\d*)?(.*)")
+def generate_new_file_name(
+    file_path: str, ignore_already_renamed: bool, use_filesystem_timestamps: bool = False
+) -> str:
+    existing_files_pattern = re.compile(rf"{TARGET_FILE_PATTERN}(_\d*)?(.*)")
 
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     file_ext = os.path.splitext(file_path)[1].lower()
@@ -146,13 +146,12 @@ def generate_new_file_name(file_path: str, ignore_already_renamed: bool, use_fil
 
     # Preserve Android moving and panorama pictures
     suffix = ""
-    for preserved_suffix in [".MP", ".PANO", ".NIGHT", ".LS", ".LONG_EXPOSURE-01.COVER", ".LONG_EXPOSURE-02.ORIGINAL"]:
+    for preserved_suffix in ANDROID_SUFFIXES:
         if preserved_suffix in file_name:
             suffix += preserved_suffix
 
     # Handle old Android filenames for moving and panorama pictures
-    prefix_map = {"MVIMG": ".MP", "PANO": ".PANO"}
-    for prefix, mapped_suffix in prefix_map.items():
+    for prefix, mapped_suffix in ANDROID_OLD_PREFIX_TO_NEW_SUFFIX.items():
         if file_name.startswith(prefix):
             suffix += mapped_suffix
 
