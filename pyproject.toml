@@ -10,15 +10,12 @@ readme = "README.md"
 python = "^3.10"
 hachoir = "^3.3.0"
 exifread = "^3.0.0"
-rawpy = "^0.23.1"
-numpy = "^1.26.4"  # rawpy requires numpy 1.X.X
+rawpy = "^0.24.0"
 python-dateutil = "^2.9.0.post0"
-
-[tool.poetry.group.dev]
-optional = true
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.2"
+pytest = "^8.3.4"
 
 [build-system]
 requires = ["poetry-core"]
