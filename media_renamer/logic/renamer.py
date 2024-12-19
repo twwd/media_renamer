@@ -13,6 +13,8 @@ from hachoir.parser import createParser
 from media_renamer.logic.android import get_date_from_android_filename
 from media_renamer.logic.time import utc_to_local
 
+TARGET_FILE_PATTERN = r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}"
+
 ext_list = [".jpg", ".jpeg", ".mov", ".mts", ".mp4", ".avi", ".raf"]
 
 
@@ -126,7 +128,7 @@ def get_date_from_raf(file_path):
 
 
 def generate_new_file_name(file_path: str, ignore_already_renamed: bool, use_filesystem_timestamps: bool) -> str:
-    existing_files_pattern = re.compile(r"\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}(_\d*)?(.*)")
+    existing_files_pattern = re.compile(fr"{TARGET_FILE_PATTERN}(_\d*)?(.*)")
 
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     file_ext = os.path.splitext(file_path)[1].lower()
@@ -153,6 +155,12 @@ def generate_new_file_name(file_path: str, ignore_already_renamed: bool, use_fil
     for prefix, mapped_suffix in prefix_map.items():
         if file_name.startswith(prefix):
             suffix += mapped_suffix
+
+    # Keep number suffixes from importing tools
+    suffix_pattern = re.compile(rf"{TARGET_FILE_PATTERN}(_\d+)")
+    suffix_matches = suffix_pattern.match(file_name)
+    if suffix_matches:
+        suffix += suffix_matches.group(1)
 
     return file_formatted_datetime + suffix + file_ext
 
