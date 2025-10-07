@@ -10,7 +10,7 @@ readme = "README.md"
 python = "^3.10"
 hachoir = "^3.3.0"
 exifread = "^3.0.0"
-rawpy = "^0.24.0"
+rawpy = "^0.25.1"
 python-dateutil = "^2.9.0.post0"
 
 [tool.poetry.group.dev.dependencies]
