@@ -1,6 +1,7 @@
 # Media Renamer
 
-Easily rename photos and videos according to the creation date
+Easily rename photos and videos according to the creation date.
+It primarily considers the EXIF date.
 
 ## Installation
 
@@ -22,6 +23,5 @@ You can launch the GUI with:
 
 ### Build with PyInstaller
 
-Ensure, that you have the poetry plugin for PyInstaller: `poetry self add poetry-pyinstaller-plugin`.
-
+Ensure that you have the poetry plugin for PyInstaller that comes with `poetry install` for Poetry 2.
 Then, you can package the application with all of its dependencies into a single folder with `poetry build`.

@@ -1,33 +1,35 @@
-[tool.poetry]
+[project]
 name = "media-renamer"
 version = "0.2.0"
 description = "Easily rename photos and videos according to the creation date"
-authors = ["Tim Walter <tim@twwd.de>"]
-license = "MIT"
+authors = [
+    {name = "Tim Walter", email = "tim@twwd.de"},
+]
+license = {text = "MIT"}
 readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "hachoir>=3.3.0",
+    "exifread>=3.0.0",
+    "rawpy>=0.24.0",
+    "python-dateutil>=2.9.0.post0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-hachoir = "^3.3.0"
-exifread = "^3.0.0"
-rawpy = "^0.24.0"
-python-dateutil = "^2.9.0.post0"
-
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.4.2"
-pytest = "^8.3.4"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
+[project.scripts]
 media_renamer = 'media_renamer.app:run'
+
+[dependency-groups]
+dev = ["ruff>=0.4.2", "pytest>=8.3.4"]
+
+
+[tool.poetry.requires-plugins]
+poetry-pyinstaller-plugin = ">=1.4.0"
 
 [tool.poetry-pyinstaller-plugin]
 
 [tool.poetry-pyinstaller-plugin.scripts]
 media_renamer = { source = "media_renamer/app.py", console = false, windowed = true }
+
 
 [tool.ruff]
 include = ["media_renamer/**/*.py",
