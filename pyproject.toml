@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 hachoir = "^3.3.0"
-exifread = "^3.0.0"
+exifread = "^3.5.1"
 rawpy = "^0.24.0"
 python-dateutil = "^2.9.0.post0"
 
