@@ -7,11 +7,11 @@ authors = [
 ]
 license = {text = "MIT"}
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "hachoir>=3.3.0",
     "exifread>=3.0.0",
-    "rawpy>=0.24.0",
+    "rawpy>=0.25.1",
     "python-dateutil>=2.9.0.post0",
 ]
 
@@ -24,6 +24,11 @@ dev = ["ruff>=0.4.2", "pytest>=8.3.4"]
 
 [tool.poetry.requires-plugins]
 poetry-pyinstaller-plugin = ">=1.4.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 
 [tool.poetry-pyinstaller-plugin]
 
