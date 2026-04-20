@@ -19,7 +19,7 @@ dependencies = [
 media_renamer = 'media_renamer.app:run'
 
 [dependency-groups]
-dev = ["ruff>=0.15.10", "pytest>=9.0.3"]
+dev = ["ruff>=0.15.11", "pytest>=9.0.3"]
 
 
 [tool.poetry.requires-plugins]
