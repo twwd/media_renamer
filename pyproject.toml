@@ -9,7 +9,7 @@ license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "hachoir>=3.3.0",
+    "hachoir>=3.4.0",
     "exifread>=3.0.0",
     "rawpy>=0.27.1",
     "python-dateutil>=2.9.0.post0",
