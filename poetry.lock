@@ -221,48 +221,45 @@ tzdata = "*"
 
 [[package]]
 name = "rawpy"
-version = "0.27.1"
+version = "0.28.0"
 description = "RAW image processing for Python, a wrapper for libraw"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.11"
 groups = ["main"]
 files = [
-    {file = "rawpy-0.27.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:0cdc8025cec3ac35fb594942a5882067e2ff31fff5107d60ec4b94f4f33e7bd6"},
-    {file = "rawpy-0.27.1-cp310-cp310-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:018f7ff6c9c11ba8c50d331db2c130535123386b03a5f231107b6f0febe4f5f8"},
-    {file = "rawpy-0.27.1-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:38c36c9756d2b0853e14f14adf2871193e081d5c6666fca31f4d1d2b1f9bf2b0"},
-    {file = "rawpy-0.27.1-cp310-cp310-win_amd64.whl", hash = "sha256:578f597f0dbdb1ba8b5a9405f45e73c95a69793d0c57504f1a7a6498ff980ab7"},
-    {file = "rawpy-0.27.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:21f97339dd72516a85ebbf9e9ad95d2be9399a41796fd142bc26c632856751ee"},
-    {file = "rawpy-0.27.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:9d70ca6b1e2b707c797e94df7bb54938b073b5fd1548ef29f132299a0f02393c"},
-    {file = "rawpy-0.27.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:80a598796529373e96102458889002b181b31ae6c76dc2731335fffe04270ed9"},
-    {file = "rawpy-0.27.1-cp311-cp311-win_amd64.whl", hash = "sha256:414305222d24fec2e15cb9a152294ad90d2e9cb6c6af768910d2adac63b29449"},
-    {file = "rawpy-0.27.1-cp311-cp311-win_arm64.whl", hash = "sha256:1c9e00dc69988f86d3f55cfc80fff525f37c0e8f060e5b3dbf4c55dfb3429e20"},
-    {file = "rawpy-0.27.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:9c5c7b396283301ddd8e04100091624a371c4f9bb2ee79fd33d21e1b6c244009"},
-    {file = "rawpy-0.27.1-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:621a957ebfcd05522b95ad1b2a5831cdfcc5a5962017a31ccb9931a8aa6d6837"},
-    {file = "rawpy-0.27.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:88bc8f7ac8418249afffa7323063d3e886d4eddc65b930aea714e8736e3af75b"},
-    {file = "rawpy-0.27.1-cp312-cp312-win_amd64.whl", hash = "sha256:e9d9c83cd0422e84b2052a02eb9d612839ac68dfae4d6d3751740e08024599b1"},
-    {file = "rawpy-0.27.1-cp312-cp312-win_arm64.whl", hash = "sha256:74be7654be9bbb19c3d1b86159d6d59f00811f2196e7296d589d3d9002d56274"},
-    {file = "rawpy-0.27.1-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:878b16434cebe66f2a575dae27ebca673be2b4b537e1f593072218bb820a79db"},
-    {file = "rawpy-0.27.1-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:8062130e2ae42daabbce91890f0bb6bb7223e813ef35bfa778462d801b5fd218"},
-    {file = "rawpy-0.27.1-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:6ea34295b96ff1a14f451c42bb6a1bf533340c3f0a71cc1f29173174713b58b8"},
-    {file = "rawpy-0.27.1-cp313-cp313-win_amd64.whl", hash = "sha256:1d2d32bfe7df6421f214f0502d34bd599ce53156401928c4f538336f2f8b3689"},
-    {file = "rawpy-0.27.1-cp313-cp313-win_arm64.whl", hash = "sha256:0d76fc7be99bfea5b875041b4346f642f33f0af1f29b9035f563af73561a5e85"},
-    {file = "rawpy-0.27.1-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:ba5c89653ea7eaef26a0d410f2804e6ae0632e102ed521e9c61c86a556c8b840"},
-    {file = "rawpy-0.27.1-cp314-cp314-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:685ad1d25d708efaa356ef3046d1c7c566a1f5a984b32cfc2032b084c15e5b85"},
-    {file = "rawpy-0.27.1-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:12d31766d5baffc6c50778ccf2e75e0256073c0b237506e448db85686513af93"},
-    {file = "rawpy-0.27.1-cp314-cp314-win_amd64.whl", hash = "sha256:b188bbc23dc4497efea94a610ac278aaba81930e090dcb019f20d8c752f6063e"},
-    {file = "rawpy-0.27.1-cp314-cp314-win_arm64.whl", hash = "sha256:738372937081fe1ab52e78b009528e7605712ce138dc1207059c3c77d00b9863"},
-    {file = "rawpy-0.27.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:b12a602788f65b10413bb72d27ddf8999e097cf2353c802306ed5219e80b41c4"},
-    {file = "rawpy-0.27.1-cp39-cp39-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:273a658bfab3a327a95baa4acdee3e5121a7163a71c943bc2f6709a87335f767"},
-    {file = "rawpy-0.27.1-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:d67ed9fe2b45c7fbe22c70c7f8d6f5bfc050c01f2ba1c7e10be28e4e4b13ef98"},
-    {file = "rawpy-0.27.1-cp39-cp39-win_amd64.whl", hash = "sha256:fe9668cc49747b1a0f57ab3708c48e1f39ff4217a30c3ca0f9c4afe4b1bc0f78"},
-    {file = "rawpy-0.27.1.tar.gz", hash = "sha256:3194d64ff690ac945e1a43237edae8a18f1f493751924de1ae2bcef473c0fb79"},
+    {file = "rawpy-0.28.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:99f8d067c59e8bcafae7eb9e4c71601b234793898a172a391cbaa5de893651e6"},
+    {file = "rawpy-0.28.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:014d5e8f3b687abe2e21988c0a228f58bc4df7c9607f50599559bd4bdbd74fc3"},
+    {file = "rawpy-0.28.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:288222bc211e03263d4669cdbf8c15958b2b630cf6cacf6b7b4a88864a24ecd7"},
+    {file = "rawpy-0.28.0-cp311-cp311-win_amd64.whl", hash = "sha256:7ac302ab6b2b29a7d4790c8b2db7f8650ae44113fdd4345b361316844ca31d92"},
+    {file = "rawpy-0.28.0-cp311-cp311-win_arm64.whl", hash = "sha256:f5f988bb6eb610c08b43521861ae788574fe1b475884f86b78f1c3c580276066"},
+    {file = "rawpy-0.28.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:60e4c82d2dbce6ae20f95d0894bcacf355d32b783cd017c374c800dfc4a0d9b3"},
+    {file = "rawpy-0.28.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:6f2b96ece54ca035ef46815ff169301e714f690f39a6cbdd87f74451bd1b0fa6"},
+    {file = "rawpy-0.28.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:68f3f4a74973f0d27d15531653b0be8e4f3ec220225a5baace6de353163ff4a2"},
+    {file = "rawpy-0.28.0-cp312-cp312-win_amd64.whl", hash = "sha256:52174204641ef54bb5ad139d0a7032e72f71e256ed85b1de4c8853116fe23eb4"},
+    {file = "rawpy-0.28.0-cp312-cp312-win_arm64.whl", hash = "sha256:25efd9ca3e374ad0174331ca6cda08d00abebfc05c174704235ef1176e94a3a4"},
+    {file = "rawpy-0.28.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:2628942390a8acf9811cfa29430c8716f1c4ee559f836e94745d0795aacef58c"},
+    {file = "rawpy-0.28.0-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:d7e51273bbce4d7580be809fab4ad1242ac9f3d1cf0484d610b93d49c682ac32"},
+    {file = "rawpy-0.28.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:52b20d0fb94d11edabb7bd410db7b9a664d400a41d793d827ab75092a7a93ff5"},
+    {file = "rawpy-0.28.0-cp313-cp313-win_amd64.whl", hash = "sha256:5dddd07b8c126402962f75562a66f94b30ee554405d5b4ae4d4ca2dbad8c5aca"},
+    {file = "rawpy-0.28.0-cp313-cp313-win_arm64.whl", hash = "sha256:7f5c1f0c9de45c21b37ddd24d29d30f3a0b4e645d74c9fd4c590308e23682b5c"},
+    {file = "rawpy-0.28.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:c2aebbd65256a7cf331fc9fdf16f9c7957a0dfb0170770016611bec9265830be"},
+    {file = "rawpy-0.28.0-cp314-cp314-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:0bd66abc39637651ba443bcfc8408450883f2b1276f76e6a54dd3ca4302afda1"},
+    {file = "rawpy-0.28.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:cd0ab6c31acfa5fee003b07cc7d70376e17f23715d968a8bded2cfe6e30f591e"},
+    {file = "rawpy-0.28.0-cp314-cp314-win_amd64.whl", hash = "sha256:9105d9523c35c7c03841943151501c78b4bec5524c31a55d7071b47f271a6ca2"},
+    {file = "rawpy-0.28.0-cp314-cp314-win_arm64.whl", hash = "sha256:197bac6b4d648973122549d1c70188a91ccf00eb2a952a7983915c4df136935a"},
+    {file = "rawpy-0.28.0-cp315-cp315-macosx_11_0_arm64.whl", hash = "sha256:95c66cdfeccd3586e866cabf0bfd20a748724c401737572df42b5360a5eea7be"},
+    {file = "rawpy-0.28.0-cp315-cp315-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:5138abc63ee03e879ed9141b23b35f4656a272b7cc3d483a6c3ac146c8fa3aec"},
+    {file = "rawpy-0.28.0-cp315-cp315-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:6cb70517f5831c814fa26100c8c97c0ba1b9e83c2287a86592e8626dc1c9b987"},
+    {file = "rawpy-0.28.0-cp315-cp315-win_amd64.whl", hash = "sha256:1c691ef2634bf51dc6bb557496201ecf4de47434288e825eca146ef67c7cf257"},
+    {file = "rawpy-0.28.0-cp315-cp315-win_arm64.whl", hash = "sha256:d0a0cfc3a53ae937bb64363f6f3781af0d159e87f77386dbf348ece68a744dbc"},
+    {file = "rawpy-0.28.0.tar.gz", hash = "sha256:3176c865b786dfec4e54251759f98e5a00733035f1f256e8c09909c59b5353d2"},
 ]
 
 [package.dependencies]
 numpy = ">=1.26.0"
 
 [package.extras]
-test = ["imageio (>=2.21)", "mypy", "pytest", "scikit-image"]
+test = ["imageio (>=2.21)", "mypy", "pytest", "scikit-image (==0.27.0rc1) ; python_version >= \"3.15\"", "scikit-image ; python_version < \"3.15\""]
 
 [[package]]
 name = "ruff"
@@ -307,4 +304,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "9ffa53518e9ac9fb756a44642bd9a907c9fb3353a225c977539bfb7a7dcebf02"
+content-hash = "4fb1c6037544dd803f28e840bb114240977d4da614abd52f073612a73b653588"
